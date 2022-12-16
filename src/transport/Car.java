@@ -1,10 +1,13 @@
 package transport;
 
-//import auxiliaryLibrary.DataService;
-//
 //import java.time.LocalDate;
 
-public class Car extends Transport {
+import auxiliaryLibrary.DataService;
+import auxiliaryLibrary.TextService;
+
+import java.util.Arrays;
+
+public class Car extends Transport implements Competing {
 
 ////    private final String body;
 ////    private final byte seatsNumber;
@@ -118,8 +121,29 @@ public class Car extends Transport {
 //        }
 //    }
 
+    private static Car[] competitionParticipants;
+
+
     public Car(String brand, String model, float engineVolume) {
         super(brand, model, engineVolume);
+        addCompetitionParticipant();
+        Transport.addCompetitionParticipant(this);
+    }
+
+
+    public final void addCompetitionParticipant() {
+        competitionParticipants = getCompetitionParticipants();
+        competitionParticipants = Arrays.copyOf(competitionParticipants, competitionParticipants.length + 1);
+        competitionParticipants[competitionParticipants.length - 1] = this;
+    }
+
+    public static void showCompetitionParticipants() {
+        if (DataService.isCorrect(competitionParticipants)) {
+            System.out.println("\nУчаствующие в соревновании Легковые автомобили:");
+            TextService.printList(competitionParticipants, TextService.PrintModes.NUMBERED_LIST_PM);
+        } else {
+            System.out.println("\nЛегковые автомобили не участвуют в соревнованиях.");
+        }
     }
 
 //    @Override
@@ -261,4 +285,23 @@ public class Car extends Transport {
 //                this.fuelType = "ДТ";
 //        }
 //    }
+
+    public static Car[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Car[0];
+        }
+        return competitionParticipants;
+    }
+
+    public static void setCompetitionParticipants(Car[] competitionParticipants) {
+        if (DataService.isCorrect(competitionParticipants)) {
+            Car.competitionParticipants = competitionParticipants;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Легковой автомобиль марки «%s %s» (объём двигателя: %.1f л)",
+                getBrand(), getModel(), engineVolume);
+    }
 }

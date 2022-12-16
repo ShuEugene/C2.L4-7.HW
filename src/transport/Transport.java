@@ -2,17 +2,26 @@ package transport;
 
 import auxiliaryLibrary.DataService;
 
-public abstract class Transport {
+import java.sql.Time;
+import java.util.Arrays;
+
+public abstract class Transport implements Competing {
 
     protected static final String DEFAULT_STRING = "default";
     protected static final String UNKNOWN_INFO = "<Информация не указана>";
+
 //    protected static final String FULL_FUEL_TANK = "\nТС не нуждается в заправке.";
 //    protected static final String REFILL_FUEL_TANK = "\nТопливный бак дозаправлен <типТоплива> на <частьБака>%.";
 //    protected static final String SPEED_MEASUREMENT_UNIT = "км/ч";
 
-
     private final String brand, model;
     protected float engineVolume;
+
+    private Time bestLapTime;
+    private float maxLapSpeed;
+
+    private static Competing[] competitionParticipants;
+
 //    private String color;
 
 //    private final String productionCountry;
@@ -69,12 +78,25 @@ public abstract class Transport {
 //        }
 //    }
 
+    protected static void addCompetitionParticipant(Transport transport) {
+        competitionParticipants = getCompetitionParticipants();
+        competitionParticipants = Arrays.copyOf(competitionParticipants, competitionParticipants.length + 1);
+        competitionParticipants[competitionParticipants.length - 1] = transport;
+    }
+
+
     protected void start() {
         System.out.println("\nНачал движение.");
     }
 
     protected void finish() {
         System.out.println("\nОстановился.");
+    }
+
+
+    @Override
+    public void pitStop() {
+        System.out.println("\nЗаехал в ПитСтоп.");
     }
 
 
@@ -188,15 +210,54 @@ public abstract class Transport {
 //    protected abstract String getFuelType();
 //
 //    protected abstract void setFuelType(String fuelType);
-
-    @Override
-    public String toString() {
+//
+//    @Override
+//    public String toString() {
 //        return String.format("Автомобиль марки %s %s\n" +
 //                        "(цвет: %s; тип кузова: %s; количество мест: %d; страна-производитель: %s; год выпуска: %d;\n" +
 //                        "объём двигателя: %.1f л; тип коробки передач: %s; покрышки: %s; регистрационный номер: \"%s\")\n",
 //                getBrand(), getModel(), getColor(), body, seatsNumber, getProductionCountry(), getProductionYear(),
 //                engineVolume, transmission, getTiresType(), regNumber);
-        return String.format("Автомобиль марки %s %s (объём двигателя: %.1f л)\n",
-                getBrand(), getModel(), engineVolume);
+//    }
+
+    @Override
+    public Time getBestLapTime() {
+        if (bestLapTime == null) {
+            return null;
+        }
+        return bestLapTime;
+    }
+
+    public void setBestLapTime(Time bestLapTime) {
+        if (bestLapTime != null) {
+            this.bestLapTime = bestLapTime;
+        }
+    }
+
+    @Override
+    public float getMaximumLapSpeed() {
+        if (maxLapSpeed <= 0) {
+            return 0;
+        }
+        return maxLapSpeed;
+    }
+
+    public void setMaxLapSpeed(float maxLapSpeed) {
+        if (maxLapSpeed > 0) {
+            this.maxLapSpeed = maxLapSpeed;
+        }
+    }
+
+    public static Competing[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Competing[0];
+        }
+        return competitionParticipants;
+    }
+
+    public static void setCompetitionParticipants(Competing[] participants) {
+        if (DataService.isCorrect(participants)) {
+            Transport.competitionParticipants = participants;
+        }
     }
 }

@@ -1,7 +1,4 @@
-import transport.Bus;
-import transport.Car;
-import transport.Transport;
-import transport.Truck;
+import transport.*;
 
 public class Main {
 
@@ -21,5 +18,7 @@ public class Main {
         Bus liaz = new Bus("ЛиАз", "5292", 6.9f);
         Bus pazVector = new Bus("ПАЗ", "Вектор Next 7.6", 4.4f);
         Bus nefaz5299 = new Bus("НефАЗ", "5299 \"Городской\"", 11.8f);
+
+        Competing.showParticipants(Transport.getCompetitionParticipants());
     }
 }

@@ -2,7 +2,13 @@ package transport;
 
 //import auxiliaryLibrary.DataService;
 
+import auxiliaryLibrary.DataService;
+
+import java.util.Arrays;
+
 public class Truck extends Transport {
+
+    private static Truck[] competitionParticipants;
 
 //    private float tripCost;
 //    private float tripDuration;
@@ -32,11 +38,31 @@ public class Truck extends Transport {
 //        }
 //    }
 
+
     public Truck(String brand, String model, float engineVolume) {
         super(brand, model, engineVolume);
+        addCompetitionParticipant();
+        Transport.addCompetitionParticipant(this);
     }
 
-//    @Override
+
+    public final void addCompetitionParticipant() {
+        competitionParticipants = getCompetitionParticipants();
+        competitionParticipants = Arrays.copyOf(competitionParticipants, competitionParticipants.length + 1);
+        competitionParticipants[competitionParticipants.length - 1] = this;
+    }
+
+//    public static void showCompetitionParticipants() {
+//        if (DataService.isCorrect(participatingBuses)) {
+//            System.out.println("\nУчаствующие в соревновании Грузовые автомобили:");
+//            TextService.printList(participatingBuses, TextService.PrintModes.NUMBERED_LIST_PM);
+//        } else {
+//            System.out.println("\nГрузовые автомобили не участвуют в соревнованиях.");
+//        }
+//    }
+
+
+    //    @Override
 //    public void refill() {
 //        refill("ДТ");
 //    }
@@ -140,4 +166,23 @@ public class Truck extends Transport {
 //                getBrand(), getModel(), getColor(), getProductionCountry(), getProductionYear(),
 //                getNumberOfWagons(), getStartStation(), getEndStation(), getStrSpeed(), getStrTripCost());
 //    }
+
+    public static Truck[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Truck[0];
+        }
+        return competitionParticipants;
+    }
+
+    public static void setCompetitionParticipants(Truck[] competitionParticipants) {
+        if (DataService.isCorrect(competitionParticipants)) {
+            Truck.competitionParticipants = competitionParticipants;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Грузовой автомобиль марки «%s %s» (объём двигателя: %.1f л)",
+                getBrand(), getModel(), engineVolume);
+    }
 }
