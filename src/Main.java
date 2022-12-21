@@ -19,6 +19,18 @@ public class Main {
         Bus pazVector = new Bus("ПАЗ", "Вектор Next 7.6", 4.4f);
         Bus nefaz5299 = new Bus("НефАЗ", "5299 \"Городской\"", 11.8f);
 
-        Competing.showParticipants(Transport.getCompetitionParticipants());
+//        Competing.showParticipants(Transport.getCompetitionParticipants());
+
+        Driver<Bus> vasiliy = new Driver<>("Василий", pazVector, 5);
+        Driver<Car> ivan = new Driver<>("Иван", moskvich, 15);
+        Driver<Truck> stepan = new Driver<>("Степан", kamaz, 10);
+
+        vasiliy.started();
+        ivan.started();
+        stepan.started();
+
+        vasiliy.transportRefuel();
+
+//        vasiliy.getOnTheTransport(ikarus);
     }
 }

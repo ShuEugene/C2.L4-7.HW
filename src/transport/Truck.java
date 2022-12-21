@@ -183,6 +183,6 @@ public class Truck extends Transport {
     @Override
     public String toString() {
         return String.format("Грузовой автомобиль марки «%s %s» (объём двигателя: %.1f л)",
-                getBrand(), getModel(), engineVolume);
+                getBrand(), getModel(), getEngineVolume());
     }
 }

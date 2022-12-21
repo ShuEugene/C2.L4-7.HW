@@ -98,6 +98,6 @@ public class Bus extends Transport {
     @Override
     public String toString() {
         return String.format("Автобус марки «%s %s» (объём двигателя: %.1f л)",
-                getBrand(), getModel(), engineVolume);
+                getBrand(), getModel(), getEngineVolume());
     }
 }

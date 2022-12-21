@@ -1,7 +1,5 @@
 package transport;
 
-//import java.time.LocalDate;
-
 import auxiliaryLibrary.DataService;
 import auxiliaryLibrary.TextService;
 
@@ -302,6 +300,6 @@ public class Car extends Transport implements Competing {
     @Override
     public String toString() {
         return String.format("Легковой автомобиль марки «%s %s» (объём двигателя: %.1f л)",
-                getBrand(), getModel(), engineVolume);
+                getBrand(), getModel(), getEngineVolume());
     }
 }

@@ -15,7 +15,9 @@ public abstract class Transport implements Competing {
 //    protected static final String SPEED_MEASUREMENT_UNIT = "км/ч";
 
     private final String brand, model;
-    protected float engineVolume;
+    private float engineVolume;
+
+    private Class<?> transportType;
 
     private Time bestLapTime;
     private float maxLapSpeed;
@@ -53,6 +55,7 @@ public abstract class Transport implements Competing {
         this.brand = getCorrect(brand);
         this.model = getCorrect(model);
         setEngineVolume(engineVolume);
+        setTransportType(getClass());
     }
 
 //    protected abstract void refill();
@@ -85,18 +88,18 @@ public abstract class Transport implements Competing {
     }
 
 
-    protected void start() {
-        System.out.println("\nНачал движение.");
+    public void started() {
+        System.out.println("\n" + getTitle() + " начал движение.");
     }
 
-    protected void finish() {
-        System.out.println("\nОстановился.");
+    public void stopped() {
+        System.out.println("\n" + getTitle() + " остановился.");
     }
 
 
     @Override
     public void pitStop() {
-        System.out.println("\nЗаехал в ПитСтоп.");
+        System.out.println("\n" + getTitle() + " заехал в пит-стоп.");
     }
 
 
@@ -115,11 +118,15 @@ public abstract class Transport implements Competing {
         return parameter;
     }
 
-    protected final String getBrand() {
+    protected final String getTitle() {
+        return "«" + getBrand() + " " + getModel() + "»";
+    }
+
+    public final String getBrand() {
         return getCorrect(brand);
     }
 
-    protected final String getModel() {
+    public final String getModel() {
         return getCorrect(model);
     }
 
@@ -259,5 +266,35 @@ public abstract class Transport implements Competing {
         if (DataService.isCorrect(participants)) {
             Transport.competitionParticipants = participants;
         }
+    }
+
+    public String getTransportTypeTitle() {
+        switch (getTransportType().getSimpleName()) {
+            case "Car":
+                return "Легковой автомобиль";
+            case "Truck":
+                return "Грузовой автомобиль";
+            case "Bus":
+                return "Автобус";
+            default:
+                return "<Неизвестный тип транспорта>";
+        }
+    }
+
+    public Class<?> getTransportType() {
+        if (transportType == null) {
+            transportType = Transport.class;
+        }
+        return transportType;
+    }
+
+    public void setTransportType(Class<?> transportType) {
+        if (transportType != null) {
+            this.transportType = transportType;
+        }
+    }
+
+    public String getTechnicalCard() {
+        return String.format("«%s %s» (объём двигателя: %.1f л)", getBrand(), getModel(), getEngineVolume());
     }
 }
