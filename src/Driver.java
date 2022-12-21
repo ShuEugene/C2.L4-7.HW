@@ -3,7 +3,7 @@ import transport.*;
 
 public class Driver<TC extends Transport & Competing> {
 
-    private enum DriveLicCategories {DLC_B, DLC_C, DLC_D;}
+    protected enum DriveLicCategories {DLC_B, DLC_C, DLC_D;}
 
     private String name;
     private DriveLicCategories driverLicenseCategory;
@@ -100,9 +100,9 @@ public class Driver<TC extends Transport & Competing> {
         }
     }
 
-    public void setDriverLicenseCategory(DriveLicCategories licenseCategory) {
-        driverLicenseCategory = licenseCategory;
-    }
+//    public void setDriverLicenseCategory(DriveLicCategories licenseCategory) {
+//        driverLicenseCategory = licenseCategory;
+//    }
 
     public int getDrivingExperience() {
         if (drivingExperience < 0) {

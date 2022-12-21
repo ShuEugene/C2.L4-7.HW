@@ -29,8 +29,10 @@ public class Main {
         ivan.started();
         stepan.started();
 
-        vasiliy.transportRefuel();
+        ivan.transportRefuel();
 
-//        vasiliy.getOnTheTransport(ikarus);
+        ivan.finished();
+        stepan.finished();
+        vasiliy.finished();
     }
 }
