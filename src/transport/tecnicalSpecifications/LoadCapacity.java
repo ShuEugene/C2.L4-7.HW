@@ -25,4 +25,9 @@ public enum LoadCapacity {
     public float getMaxCapacity() {
         return maxCapacity;
     }
+
+    @Override
+    public String toString() {
+        return "грузоподъёмность: " + TS.getCapacityString(minCapacity, maxCapacity) + " тонн";
+    }
 }

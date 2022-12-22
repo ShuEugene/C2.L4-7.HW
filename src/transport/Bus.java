@@ -2,6 +2,7 @@ package transport;
 
 import auxiliaryLibrary.DataService;
 import auxiliaryLibrary.TextService;
+import transport.tecnicalSpecifications.PassangerCapacity;
 
 import java.util.Arrays;
 
@@ -24,13 +25,37 @@ public class Bus extends Transport {
 
     private static Bus[] competitionParticipants;
 
+    public static Bus[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Bus[0];
+        }
+        return competitionParticipants;
+    }
+
+
+    private PassangerCapacity type;
+
 
     public Bus(String brand, String model, float engineVolume) {
+        this(brand, model, engineVolume, null);
+    }
+
+    public Bus(String brand, String model, float engineVolume, PassangerCapacity type) {
         super(brand, model, engineVolume);
+        this.type = type;
         addCompetitionParticipant();
         Transport.addCompetitionParticipant(this);
     }
 
+
+    @Override
+    public void printType() {
+        if (type == null) {
+            System.out.println("\nДанных по " + getTitle() + " недостаточно.");
+            return;
+        }
+        System.out.println("\nТип " + getTitle() + " - «" + getType().name() + "» (" + type + ").");
+    }
 
     public final void addCompetitionParticipant() {
         competitionParticipants = getCompetitionParticipants();
@@ -82,21 +107,13 @@ public class Bus extends Transport {
 //                getBrand(), getModel(), getColor(), getProductionCountry(), getProductionYear(), getStrSpeed());
 //    }
 
-    public static Bus[] getCompetitionParticipants() {
-        if (competitionParticipants == null) {
-            competitionParticipants = new Bus[0];
-        }
-        return competitionParticipants;
-    }
 
-    public static void setCompetitionParticipants(Bus[] competitionParticipants) {
-        if (DataService.isCorrect(competitionParticipants)) {
-            Bus.competitionParticipants = competitionParticipants;
-        }
+    PassangerCapacity getType() {
+        return type;
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return String.format("Автобус марки «%s %s» (объём двигателя: %.1f л)",
                 getBrand(), getModel(), getEngineVolume());
     }

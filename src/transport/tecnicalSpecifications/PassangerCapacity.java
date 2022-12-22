@@ -3,9 +3,9 @@ package transport.tecnicalSpecifications;
 public enum PassangerCapacity {
     VERY_SMALL(10),
     SMALL(25),
-    MEDIUM(40,50),
-    LARGE(60,80),
-    EXTRA_LARGE(100,120);
+    MEDIUM(40, 50),
+    LARGE(60, 80),
+    EXTRA_LARGE(100, 120);
 
     private int minCapacity, maxCapacity;
 
@@ -24,5 +24,10 @@ public enum PassangerCapacity {
 
     public int getMaxCapacity() {
         return maxCapacity;
+    }
+
+    @Override
+    public String toString() {
+        return "вместимость: " + TS.getCapacityString(minCapacity, maxCapacity) + " человек(-а)";
     }
 }

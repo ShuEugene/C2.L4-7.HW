@@ -14,15 +14,15 @@ public abstract class Transport implements Competing {
 //    protected static final String REFILL_FUEL_TANK = "\nТопливный бак дозаправлен <типТоплива> на <частьБака>%.";
 //    protected static final String SPEED_MEASUREMENT_UNIT = "км/ч";
 
-    private final String brand, model;
-    private float engineVolume;
-
-    private Class<?> transportType;
-
-    private Time bestLapTime;
-    private float maxLapSpeed;
 
     private static Competing[] competitionParticipants;
+
+    protected static void addCompetitionParticipant(Transport transport) {
+        competitionParticipants = getCompetitionParticipants();
+        competitionParticipants = Arrays.copyOf(competitionParticipants, competitionParticipants.length + 1);
+        competitionParticipants[competitionParticipants.length - 1] = transport;
+    }
+
 
 //    private String color;
 
@@ -37,7 +37,7 @@ public abstract class Transport implements Competing {
 //    protected byte defaultParametersNumber = 0;
 
 
-//    protected Transport(String brand, String model, String color, String productionCountry, int productionYear) {
+    //    protected Transport(String brand, String model, String color, String productionCountry, int productionYear) {
 //        this(brand, model, color, productionCountry, productionYear, 0);
 //    }
 //
@@ -51,12 +51,22 @@ public abstract class Transport implements Competing {
 //        setSpeed(speed);
 //    }
 
+    private final String brand, model;
+    private float engineVolume;
+
+    private Class<?> transportType;
+
+    private Time bestLapTime;
+    private float maxLapSpeed;
+
+
     protected Transport(String brand, String model, float engineVolume) {
         this.brand = getCorrect(brand);
         this.model = getCorrect(model);
         setEngineVolume(engineVolume);
         setTransportType(getClass());
     }
+
 
 //    protected abstract void refill();
 //
@@ -81,12 +91,7 @@ public abstract class Transport implements Competing {
 //        }
 //    }
 
-    protected static void addCompetitionParticipant(Transport transport) {
-        competitionParticipants = getCompetitionParticipants();
-        competitionParticipants = Arrays.copyOf(competitionParticipants, competitionParticipants.length + 1);
-        competitionParticipants[competitionParticipants.length - 1] = transport;
-    }
-
+    public abstract void printType();
 
     public void started() {
         System.out.println("\n" + getTitle() + " начал движение.");
@@ -96,12 +101,10 @@ public abstract class Transport implements Competing {
         System.out.println("\n" + getTitle() + " остановился.");
     }
 
-
     @Override
     public void pitStop() {
         System.out.println("\n" + getTitle() + " заехал в пит-стоп.");
     }
-
 
 //    protected final String getCorrect(String parameter) {
 //        if (!DataService.isCorrect(parameter)) {

@@ -2,6 +2,7 @@ package transport;
 
 import auxiliaryLibrary.DataService;
 import auxiliaryLibrary.TextService;
+import transport.tecnicalSpecifications.CarBody;
 
 import java.util.Arrays;
 
@@ -121,13 +122,37 @@ public class Car extends Transport implements Competing {
 
     private static Car[] competitionParticipants;
 
+    public static Car[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Car[0];
+        }
+        return competitionParticipants;
+    }
+
+
+    private CarBody type;
+
 
     public Car(String brand, String model, float engineVolume) {
+        this(brand, model, engineVolume, null);
+    }
+
+    public Car(String brand, String model, float engineVolume, CarBody type) {
         super(brand, model, engineVolume);
+        this.type = type;
         addCompetitionParticipant();
         Transport.addCompetitionParticipant(this);
     }
 
+
+    @Override
+    public void printType() {
+        if (type == null) {
+            System.out.println("\nДанных по " + getTitle() + " недостаточно.");
+            return;
+        }
+        System.out.println("\nТип " + getTitle() + " - «" + getType().name() + "» (" + type + ").");
+    }
 
     public final void addCompetitionParticipant() {
         competitionParticipants = getCompetitionParticipants();
@@ -135,14 +160,6 @@ public class Car extends Transport implements Competing {
         competitionParticipants[competitionParticipants.length - 1] = this;
     }
 
-    public static void showCompetitionParticipants() {
-        if (DataService.isCorrect(competitionParticipants)) {
-            System.out.println("\nУчаствующие в соревновании Легковые автомобили:");
-            TextService.printList(competitionParticipants, TextService.PrintModes.NUMBERED_LIST_PM);
-        } else {
-            System.out.println("\nЛегковые автомобили не участвуют в соревнованиях.");
-        }
-    }
 
 //    @Override
 //    public void refill() {
@@ -284,17 +301,8 @@ public class Car extends Transport implements Competing {
 //        }
 //    }
 
-    public static Car[] getCompetitionParticipants() {
-        if (competitionParticipants == null) {
-            competitionParticipants = new Car[0];
-        }
-        return competitionParticipants;
-    }
-
-    public static void setCompetitionParticipants(Car[] competitionParticipants) {
-        if (DataService.isCorrect(competitionParticipants)) {
-            Car.competitionParticipants = competitionParticipants;
-        }
+    CarBody getType() {
+        return type;
     }
 
     @Override

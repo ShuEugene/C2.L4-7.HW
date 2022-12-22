@@ -20,4 +20,9 @@ public enum CarBody {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return "тип кузова: " + title;
+    }
 }

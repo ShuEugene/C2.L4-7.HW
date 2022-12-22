@@ -1,14 +1,21 @@
 package transport;
 
-//import auxiliaryLibrary.DataService;
-
 import auxiliaryLibrary.DataService;
+import transport.tecnicalSpecifications.LoadCapacity;
 
 import java.util.Arrays;
 
 public class Truck extends Transport {
 
     private static Truck[] competitionParticipants;
+
+    public static Truck[] getCompetitionParticipants() {
+        if (competitionParticipants == null) {
+            competitionParticipants = new Truck[0];
+        }
+        return competitionParticipants;
+    }
+
 
 //    private float tripCost;
 //    private float tripDuration;
@@ -38,13 +45,28 @@ public class Truck extends Transport {
 //        }
 //    }
 
+    private LoadCapacity type;
 
     public Truck(String brand, String model, float engineVolume) {
+        this(brand, model, engineVolume, null);
+    }
+
+    public Truck(String brand, String model, float engineVolume, LoadCapacity type) {
         super(brand, model, engineVolume);
+        this.type = type;
         addCompetitionParticipant();
         Transport.addCompetitionParticipant(this);
     }
 
+
+    @Override
+    public void printType() {
+        if (type == null) {
+            System.out.println("\nДанных по " + getTitle() + " недостаточно.");
+            return;
+        }
+        System.out.println("\nТип " + getTitle() + " - «" + getType().name() + "» (" + type + ").");
+    }
 
     public final void addCompetitionParticipant() {
         competitionParticipants = getCompetitionParticipants();
@@ -167,17 +189,9 @@ public class Truck extends Transport {
 //                getNumberOfWagons(), getStartStation(), getEndStation(), getStrSpeed(), getStrTripCost());
 //    }
 
-    public static Truck[] getCompetitionParticipants() {
-        if (competitionParticipants == null) {
-            competitionParticipants = new Truck[0];
-        }
-        return competitionParticipants;
-    }
 
-    public static void setCompetitionParticipants(Truck[] competitionParticipants) {
-        if (DataService.isCorrect(competitionParticipants)) {
-            Truck.competitionParticipants = competitionParticipants;
-        }
+    LoadCapacity getType() {
+        return type;
     }
 
     @Override
