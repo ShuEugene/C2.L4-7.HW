@@ -22,10 +22,12 @@ public class Main {
 
 //        Competing.showParticipants(Transport.getCompetitionParticipants());
 
-//        Driver<Bus> vasiliy = new Driver<>("Василий", pazVector, 5);
-//        Driver<Car> ivan = new Driver<>("Иван", moskvich, 15);
-//        Driver<Truck> stepan = new Driver<>("Степан", kamaz, 10);
-//
+        transport.Driver<Car> ivan = new transport.Driver<>("Иван", moskvich, 15);
+        transport.Driver<Truck> stepan = new transport.Driver<>("Степан", kamaz, 10);
+        transport.Driver<Bus> vasiliy = new transport.Driver<>("Василий", pazVector, 5);
+        transport.Driver<Bus> fedor = new transport.Driver<>("Фёдор");
+        kraz.setDriver(fedor);
+
 //        vasiliy.started();
 //        ivan.started();
 //        stepan.started();
@@ -36,9 +38,11 @@ public class Main {
 //        stepan.finished();
 //        vasiliy.finished();
 
-        ladaVesta.printType();
-        moskvich.printType();
-        zil5301Bychok.printType();
-        ikarus.printType();
+//        ladaVesta.printType();
+//        moskvich.printType();
+//        zil5301Bychok.printType();
+//        ikarus.printType();
+
+        Transport.diagnoseTheCompetitors();
     }
 }

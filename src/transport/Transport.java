@@ -14,7 +14,6 @@ public abstract class Transport implements Competing {
 //    protected static final String REFILL_FUEL_TANK = "\nТопливный бак дозаправлен <типТоплива> на <частьБака>%.";
 //    protected static final String SPEED_MEASUREMENT_UNIT = "км/ч";
 
-
     private static Competing[] competitionParticipants;
 
     protected static void addCompetitionParticipant(Transport transport) {
@@ -23,6 +22,29 @@ public abstract class Transport implements Competing {
         competitionParticipants[competitionParticipants.length - 1] = transport;
     }
 
+    public static void diagnoseTheCompetitors() {
+        for (Competing transport :
+                competitionParticipants) {
+            if (!transport.getClass().getSimpleName().equals("Transport")) {
+                if (transport.getClass() == Bus.class) {
+                    System.out.println("\nАвтобусу диагностика не требуется.");
+                } else {
+                    Diagnosed diagnosed = (Diagnosed) transport;
+                    try {
+                        if (diagnosed.performDiagnostics()) {
+                            Transport diagnosedTransport = (Transport) transport;
+                            System.out.println("\n" + diagnosedTransport.getTechnicalCard().replace(" л)",
+                                    " л; водитель - " + ((Transport) transport).getDriver().getName() + ")")
+                                    + " успешно прошёл дигностику.");
+                        }
+
+                    } catch (NullPointerException e) {
+                        System.out.println("\nПрохождение диагностики исключено: " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
 
 //    private String color;
 
@@ -58,6 +80,8 @@ public abstract class Transport implements Competing {
 
     private Time bestLapTime;
     private float maxLapSpeed;
+
+    private Driver driver;
 
 
     protected Transport(String brand, String model, float engineVolume) {
@@ -299,5 +323,15 @@ public abstract class Transport implements Competing {
 
     public String getTechnicalCard() {
         return String.format("«%s %s» (объём двигателя: %.1f л)", getBrand(), getModel(), getEngineVolume());
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        if (driver != null) {
+            this.driver = driver;
+        }
     }
 }

@@ -5,7 +5,7 @@ import transport.tecnicalSpecifications.LoadCapacity;
 
 import java.util.Arrays;
 
-public class Truck extends Transport {
+public class Truck extends Transport implements Diagnosed {
 
     private static Truck[] competitionParticipants;
 
@@ -58,6 +58,18 @@ public class Truck extends Transport {
         Transport.addCompetitionParticipant(this);
     }
 
+
+    @Override
+    public boolean performDiagnostics() {
+        Driver<Transport> driver = getDriver();
+        if (driver == null) {
+            throw new NullPointerException("За " + getTitle() + " не закреплён водитель.");
+        }
+        if (driver.getDriverLicenseCategory() == Driver.DriveLicCategories.DLC_N) {
+            throw new NullPointerException("У водителя (" + driver.getName() + ") отсутствуют водительские права.");
+        }
+        return true;
+    }
 
     @Override
     public void printType() {

@@ -1,12 +1,10 @@
 package transport;
 
-import auxiliaryLibrary.DataService;
-import auxiliaryLibrary.TextService;
-import transport.tecnicalSpecifications.CarBody;
-
 import java.util.Arrays;
 
-public class Car extends Transport implements Competing {
+import transport.tecnicalSpecifications.CarBody;
+
+public class Car extends Transport implements Diagnosed {
 
 ////    private final String body;
 ////    private final byte seatsNumber;
@@ -144,6 +142,18 @@ public class Car extends Transport implements Competing {
         Transport.addCompetitionParticipant(this);
     }
 
+
+    @Override
+    public boolean performDiagnostics() {
+        Driver<Transport> driver = getDriver();
+        if (driver == null) {
+            throw new NullPointerException("За " + getTitle() + " не закреплён водитель.");
+        }
+        if (driver.getDriverLicenseCategory() == Driver.DriveLicCategories.DLC_N) {
+            throw new NullPointerException("У водителя (" + driver.getName() + ") отсутствуют водительские права.");
+        }
+        return true;
+    }
 
     @Override
     public void printType() {

@@ -1,27 +1,41 @@
+package transport;
+
 import auxiliaryLibrary.DataService;
 import transport.*;
 
 public class Driver<TC extends Transport & Competing> {
 
-    protected enum DriveLicCategories {DLC_B, DLC_C, DLC_D;}
+    protected enum DriveLicCategories {
+        DLC_B("B"), DLC_C("C"), DLC_D("D"), DLC_N("<отсутствует>");
+
+        String title;
+
+        DriveLicCategories(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return "«" + title + "»";
+        }
+    }
 
     private String name;
     private DriveLicCategories driverLicenseCategory;
     private int drivingExperience;
     private TC transport;
 
-//    public Driver(String name, TC driverLicense) {
+//    public transport.Driver(String name, TC driverLicense) {
 //        this(name, driverLicense, 1);
 //    }
 //
-//    public Driver(String name, TC driverLicense, int drivingExperience) {
+//    public transport.Driver(String name, TC driverLicense, int drivingExperience) {
 //        setName(name);
 //        setDriverLicense(driverLicense);
 //        setDrivingExperience(drivingExperience);
 //    }
 
     public Driver(String name) {
-        this(name, null, 0);
+        this(name, null, 1);
     }
 
     public Driver(String name, TC transport) {
@@ -32,6 +46,9 @@ public class Driver<TC extends Transport & Competing> {
         setName(name);
         setDriverLicenseCategory(transport);
         getOnTheTransport(transport);
+        if (getTransport() != null) {
+            getTransport().setDriver(this);
+        }
         setDrivingExperience(drivingExperience);
     }
 
@@ -87,6 +104,9 @@ public class Driver<TC extends Transport & Competing> {
     }
 
     public DriveLicCategories getDriverLicenseCategory() {
+        if (driverLicenseCategory == null) {
+            driverLicenseCategory = DriveLicCategories.DLC_N;
+        }
         return driverLicenseCategory;
     }
 
@@ -97,7 +117,7 @@ public class Driver<TC extends Transport & Competing> {
     public void setDriverLicenseCategory(TC transport) {
         if (transport != null) {
             driverLicenseCategory = getTransportCategory(transport);
-        }
+        } else driverLicenseCategory = DriveLicCategories.DLC_N;
     }
 
 //    public void setDriverLicenseCategory(DriveLicCategories licenseCategory) {
@@ -174,5 +194,11 @@ public class Driver<TC extends Transport & Competing> {
             System.out.println("\n" + getName() + " соревнуется на "
                     + transportType + " " + transport.getTechnicalCard() + ".");
         }
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " (категория прав: " + getDriverLicenseCategory().getTitle() + "; "
+                + "опыт вождения (лет): " + drivingExperience + ")";
     }
 }
