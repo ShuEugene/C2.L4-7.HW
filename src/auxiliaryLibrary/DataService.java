@@ -1,19 +1,24 @@
 package auxiliaryLibrary;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class DataService {
 
-//  correctParameters
+    //  correctParameters
     public static boolean isCorrect(String parameter) {
         return parameter != null && !parameter.isBlank() && !parameter.isEmpty();
+    }
+
+    public static boolean isCorrect(List<?> list) {
+        return list != null && list.size() > 0;
     }
 
     public static <T> boolean isCorrect(T[] array) {
         return array != null && getNotNullObjectsNumber(array) > 0;
     }
 
-//  notNullObjects
+    //  notNullObjects
     public static int getIndexOfLastNotNullObject(Object[] objects) {
         if (objects == null) {
             return -1;
@@ -79,7 +84,7 @@ public class DataService {
         return nnObjects;
     }
 
-//  matches
+    //  matches
     public static <T> int getFirstMatchIndex(T[] array, T target) {
         if (!isCorrect(array) || target == null) {
             return -1;

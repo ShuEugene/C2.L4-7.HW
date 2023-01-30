@@ -1,6 +1,8 @@
 package transport;
 
+import specialists.Mechanic.RepairType;
+
 public interface Diagnosed {
 
-    boolean performDiagnostics();
+    RepairType performDiagnostics() throws Transport.DriverException;
 }
