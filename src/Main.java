@@ -1,17 +1,25 @@
 import auxiliaryLibrary.TextService;
-import specialists.Driver;
-import specialists.Mechanic;
-import specialists.Mechanic.MechanicException;
-import specialists.Mechanic.RepairType;
-import transport.Bus;
-import transport.Car;
+
 import transport.Transport;
 import transport.Transport.Category;
 import transport.Transport.TransportException;
+import transport.Car;
 import transport.Truck;
+import transport.Bus;
+
 import transport.tecnicalSpecifications.CarBody;
 import transport.tecnicalSpecifications.LoadCapacity;
 import transport.tecnicalSpecifications.PassangerCapacity;
+
+import specialists.Driver;
+
+import specialists.Mechanic;
+import specialists.Mechanic.MechanicException;
+import specialists.Mechanic.Repaired;
+import specialists.Mechanic.RepairType;
+
+import specialists.ServiceStation;
+import specialists.ServiceStation.ServiceException;
 
 public class Main {
     public static void main(String[] args) {
@@ -65,7 +73,7 @@ public class Main {
 
         Transport.getDiagnosesOfTheCompetitors();
 
-        Mechanic potapych;
+        Mechanic potapych = null;
         try {
             potapych = new Mechanic("Бывалый", "Семён Потапович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             potapych.addRepaired(lada21099, moskvich, kamaz, pazVector);
@@ -74,7 +82,7 @@ public class Main {
             TextService.printException(e);
         }
 
-        Mechanic trofimych;
+        Mechanic trofimych = null;
         try {
             trofimych = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B/*, Category.DLC_C, Category.DLC_D*/);
             trofimych.addRepaired(kamaz);
@@ -83,7 +91,18 @@ public class Main {
             TextService.printException(e);
         }
 
-        kamaz.showSpecialists();
+//        kamaz.showSpecialists();
+
+        ServiceStation station;
+        try {
+            station = new ServiceStation("СТО-1", potapych, trofimych);
+            station.performDiagnostic(new Repaired(kamaz));
+            station.addRepaired(kamaz);
+            station.performDiagnostic(new Repaired(kamaz));
+
+        } catch (ServiceException | TransportException e) {
+            TextService.printException(e);
+        }
 
 //        Physical karavaevPA;
 //        try {

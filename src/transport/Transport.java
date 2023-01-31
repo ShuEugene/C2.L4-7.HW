@@ -90,7 +90,7 @@ public abstract class Transport implements Competing {
 
                 RepairType diagnosis = null;
                 try {
-                    diagnosis = diagnosed.performDiagnostics();
+                    diagnosis = diagnosed.performDiagnostic();
                 } catch (DriverException e) {
                     System.out.println("\nПрохождение диагностики исключено: " + e.getMessage());
                     continue;
@@ -138,6 +138,7 @@ public abstract class Transport implements Competing {
 
     private RepairType repairType;
     private LinkedList<Mechanic> mechanics;
+    private ServiceStation serviceStation;
 
     private LinkedList<Sponsor> sponsorList = new LinkedList<>();
 
@@ -214,7 +215,7 @@ public abstract class Transport implements Competing {
             TextService.printList(getMechsList(), PrintModes.NUMBERED_LIST_PM);
     }
 
-    public RepairType performDiagnostics() throws DriverException {
+    public RepairType performDiagnostic() throws DriverException {
         if (driver == null)
             throw new DriverException("за " + getTitle() + " не закреплён водитель.");
 
@@ -569,8 +570,8 @@ public abstract class Transport implements Competing {
 
         String[] list = new String[mechanics.size()];
         int index = -1;
-        for (Mechanic current:
-             mechanics) {
+        for (Mechanic current :
+                mechanics) {
             if (current != null)
                 list[++index] = current.getInfo();
         }
@@ -588,6 +589,15 @@ public abstract class Transport implements Competing {
         if (mechanics != null) {
             this.mechanics = mechanics;
         }
+    }
+
+    public final ServiceStation getServiceStation() {
+        return serviceStation;
+    }
+
+    public void setServiceStation(ServiceStation serviceStation) {
+        if (serviceStation != null)
+            this.serviceStation = serviceStation;
     }
 
     @Override

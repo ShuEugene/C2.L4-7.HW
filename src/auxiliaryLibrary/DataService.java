@@ -1,6 +1,7 @@
 package auxiliaryLibrary;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class DataService {
@@ -10,7 +11,7 @@ public class DataService {
         return parameter != null && !parameter.isBlank() && !parameter.isEmpty();
     }
 
-    public static boolean isCorrect(List<?> list) {
+    public static boolean isCorrect(Collection<?> list) {
         return list != null && list.size() > 0;
     }
 

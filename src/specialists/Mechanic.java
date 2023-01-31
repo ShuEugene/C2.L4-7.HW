@@ -3,14 +3,12 @@ package specialists;
 import auxiliaryLibrary.DataService;
 import auxiliaryLibrary.TextService;
 import specialists.Mechanic.Repaired.RepairException;
+import transport.Bus;
 import transport.Transport;
 import transport.Transport.Category;
 import transport.Transport.TransportException;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 
@@ -125,6 +123,8 @@ public class Mechanic {
     private String company;
     private ArrayList<Category> specializations;
 
+    private ServiceStation serviceStation;
+
     private int queueCapacity;
     private Deque<Repaired> repaired;
 
@@ -194,7 +194,7 @@ public class Mechanic {
     public void addRepaired(Transport transport)
             throws MechanicException, TransportException {
 
-        if (transport == null)
+        if (transport == null || transport instanceof Bus)
             return;
 
         String techCard = transport.getTechnicalCard();
@@ -213,9 +213,7 @@ public class Mechanic {
                 getRepaired().add(newRepaired);
                 if (!transport.mechAlreadyAssigned(this))
                     transport.getMechanics().offer(this);
-            }
-
-            else
+            } else
                 throw new MechanicException("данная категория транспортных средств (" + trCategory + ")" +
                         " не входит в область специализации этого механика (" + getInfo() + ").");
 
@@ -246,6 +244,19 @@ public class Mechanic {
         }
 
         System.out.println("\n" + techCard + " теперь в очереди на " + repairType.title + " к механику (" + this + ").");
+
+        if (serviceStation != null) {
+            Deque<Repaired> repairedAtStation = serviceStation.getRepaired();
+
+            if (!repairedAtStation.contains(newRepaired))
+                if (repairedAtStation.offer(newRepaired))
+                    System.out.println("Станция ТО " + serviceStation + " приняла на обслуживание " + techCard + ".");
+                else
+                    System.out.println("Станция ТО " + serviceStation + "не приняла на обслуживание " + techCard + ".");
+
+            else
+                System.out.println("\n" + techCard + " уже стоит в очереди на обслуживание на станции ТО " + serviceStation + ".");
+        }
     }
 
     public void addRepaired(Transport... transports)
@@ -255,7 +266,7 @@ public class Mechanic {
 
             for (Transport current
                     : transports) {
-                if (current != null)
+                if (current != null && !(current instanceof Bus))
                     addRepaired(current);
             }
     }
@@ -375,6 +386,15 @@ public class Mechanic {
     public void setQueueCapacity(int queueCapacity) {
         this.queueCapacity = Math.max(queueCapacity, MIN_QUEUE_CAP);
         repaired = newRepaired();
+    }
+
+    public ServiceStation getServiceStation() {
+        return serviceStation;
+    }
+
+    public void setServiceStation(ServiceStation serviceStation) {
+        if (serviceStation != null)
+            this.serviceStation = serviceStation;
     }
 
     @Override
