@@ -71,7 +71,7 @@ public class Main {
         kamaz.setRepairType(RepairType.REPAIR);
         pazVector.setRepairType(RepairType.REPAIR);
 
-        Transport.getDiagnosesOfTheCompetitors();
+//        Transport.getDiagnosesOfTheCompetitors();
 
         Mechanic potapych = null;
         try {
@@ -82,27 +82,29 @@ public class Main {
             TextService.printException(e);
         }
 
-        Mechanic trofimych = null;
+        Mechanic trofimych = null, trofimych2 = null;
         try {
-            trofimych = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B/*, Category.DLC_C, Category.DLC_D*/);
+            trofimych = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
+            trofimych2 = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             trofimych.addRepaired(kamaz);
+            trofimych2.addRepaired(kamaz);
 //            trofimych.showRepaired();
         } catch (MechanicException | TransportException e) {
             TextService.printException(e);
         }
 
-//        kamaz.showSpecialists();
+        kamaz.showSpecialists();
 
-        ServiceStation station;
-        try {
-            station = new ServiceStation("СТО-1", potapych, trofimych);
-            station.performDiagnostic(new Repaired(kamaz));
-            station.addRepaired(kamaz);
-            station.performDiagnostic(new Repaired(kamaz));
-
-        } catch (ServiceException | TransportException e) {
-            TextService.printException(e);
-        }
+//        ServiceStation station;
+//        try {
+//            station = new ServiceStation("СТО-1", potapych, trofimych);
+//            station.performDiagnostic(new Repaired(kamaz));
+//            station.addRepaired(kamaz);
+//            station.performDiagnostic(new Repaired(kamaz));
+//
+//        } catch (ServiceException | TransportException e) {
+//            TextService.printException(e);
+//        }
 
 //        Physical karavaevPA;
 //        try {

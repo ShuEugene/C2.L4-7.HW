@@ -9,10 +9,7 @@ import specialists.Sponsor.SponsorException;
 import specialists.Sponsor.Sponsored;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 public abstract class Transport implements Competing {
@@ -137,7 +134,7 @@ public abstract class Transport implements Competing {
     private float maxLapSpeed;
 
     private RepairType repairType;
-    private LinkedList<Mechanic> mechanics;
+    private Set<Mechanic> mechanics;
     private ServiceStation serviceStation;
 
     private LinkedList<Sponsor> sponsorList = new LinkedList<>();
@@ -204,7 +201,7 @@ public abstract class Transport implements Competing {
         }
 
         if (mechanics.size() < 2)
-            printTitle = "\nОбслуживанием " + techCard + " занимается " + mechanics.get(0).getInfo() + ".";
+            printTitle = "\nОбслуживанием " + techCard + " занимается " + ((Mechanic) mechanics.toArray()[0]).getInfo() + ".";
 
         else
             printTitle = "\nВ " + (repairType == RepairType.SERVICE ? "техобслуживании" : "ремонте")
@@ -578,14 +575,14 @@ public abstract class Transport implements Competing {
         return list;
     }
 
-    public final LinkedList<Mechanic> getMechanics() {
+    public final Set<Mechanic> getMechanics() {
         if (getRepairType() == RepairType.PROPERLY || mechanics == null)
-            mechanics = new LinkedList<>();
+            mechanics = new HashSet<>();
 
         return mechanics;
     }
 
-    public final void setMechanics(LinkedList<Mechanic> mechanics) {
+    public final void setMechanics(Set<Mechanic> mechanics) {
         if (mechanics != null) {
             this.mechanics = mechanics;
         }

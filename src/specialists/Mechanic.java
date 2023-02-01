@@ -203,8 +203,9 @@ public class Mechanic {
         if (repairType == RepairType.PROPERLY)
             throw new MechanicException(techCard + " не требует ни ремонта, ни техобслуживания.");
 
-        if (isRepaired(transport))
-            throw new MechanicException(techCard + " уже стои́т в очереди на " + repairType.title + ".");
+        if (isRepaired(transport) || transport.getMechanics().contains(this))
+            throw new MechanicException(techCard + " уже стои́т в очереди на " + repairType.title + " у этого механика ("
+                    + this + ").");
 
         Repaired newRepaired = new Repaired(transport, repairType);
         String trCategory = transport.getCategory().getTitle();
@@ -212,7 +213,7 @@ public class Mechanic {
             if (getSpecializationsEnum().contains(trCategory)) {
                 getRepaired().add(newRepaired);
                 if (!transport.mechAlreadyAssigned(this))
-                    transport.getMechanics().offer(this);
+                    transport.getMechanics().add(this);
             } else
                 throw new MechanicException("данная категория транспортных средств (" + trCategory + ")" +
                         " не входит в область специализации этого механика (" + getInfo() + ").");
