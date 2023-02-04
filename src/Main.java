@@ -148,5 +148,6 @@ public class Main {
 //        }
 //
 //        kamaz.showSponsors();
+
     }
 }
