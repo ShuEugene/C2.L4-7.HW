@@ -39,22 +39,20 @@ public class Main {
         kamaz.setRepairType(RepairType.REPAIR);
         pazVector.setRepairType(RepairType.REPAIR);
 
-        Mechanic potapych = null;
+        Mechanic potapych;
         try {
             potapych = new Mechanic("Бывалый", "Семён Потапович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             potapych.addRepaired(lada21099, moskvich, kamaz, pazVector);
-//            potapych.showRepaired();
         } catch (MechanicException | TransportException e) {
             TextService.printException(e);
         }
 
-        Mechanic trofimych = null, trofimych2 = null;
+        Mechanic trofimych, trofimych2;
         try {
             trofimych = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             trofimych2 = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             trofimych.addRepaired(kamaz);
             trofimych2.addRepaired(kamaz);
-//            trofimych.showRepaired();
         } catch (MechanicException | TransportException e) {
             TextService.printException(e);
         }
