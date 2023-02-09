@@ -212,8 +212,8 @@ public class Mechanic {
         try {
             if (getSpecializationsEnum().contains(trCategory)) {
                 getRepaired().add(newRepaired);
-                if (!transport.mechAlreadyAssigned(this))
-                    transport.getMechanics().add(this);
+                transport.getMechanics().add(this);
+
             } else
                 throw new MechanicException("данная категория транспортных средств (" + trCategory + ")" +
                         " не входит в область специализации этого механика (" + getInfo() + ").");
@@ -399,11 +399,6 @@ public class Mechanic {
     }
 
     @Override
-    public String toString() {
-        return getFirstName() + " " + getLastName() + " (компания: " + getCompany() + ")";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Mechanic)) return false;
@@ -414,5 +409,10 @@ public class Mechanic {
     @Override
     public int hashCode() {
         return Objects.hash(getFirstName(), getLastName());
+    }
+
+    @Override
+    public String toString() {
+        return getFirstName() + " " + getLastName() + " (компания: " + getCompany() + ")";
     }
 }

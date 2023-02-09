@@ -134,7 +134,7 @@ public abstract class Transport implements Competing {
     private float maxLapSpeed;
 
     private RepairType repairType;
-    private Set<Mechanic> mechanics;
+    private Set<Mechanic> mechanics = new HashSet<>();
     private ServiceStation serviceStation;
 
     private LinkedList<Sponsor> sponsorList = new LinkedList<>();

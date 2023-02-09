@@ -39,15 +39,15 @@ public class Main {
         kamaz.setRepairType(RepairType.REPAIR);
         pazVector.setRepairType(RepairType.REPAIR);
 
-        Mechanic potapych;
+        Mechanic potapych = null;
         try {
             potapych = new Mechanic("Бывалый", "Семён Потапович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
-            potapych.addRepaired(lada21099, moskvich, kamaz, pazVector);
+            potapych.addRepaired(lada21099);
         } catch (MechanicException | TransportException e) {
             TextService.printException(e);
         }
 
-        Mechanic trofimych, trofimych2;
+        Mechanic trofimych = null, trofimych2 = null;
         try {
             trofimych = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
             trofimych2 = new Mechanic("Ворчалкин", "Егор Трофимович", Category.DLC_B, Category.DLC_C, Category.DLC_D);
@@ -58,5 +58,17 @@ public class Main {
         }
 
         kamaz.showSpecialists();
+
+        ServiceStation toStation1;
+        try {
+            toStation1 = new ServiceStation("Станция ТО №1");
+            toStation1.addTask(kamaz, potapych);
+            toStation1.addTask(kamaz, trofimych);
+            toStation1.addTask(kamaz, trofimych2);
+            toStation1.addTask(lada21099, potapych);
+            toStation1.showTasks();
+        } catch (ServiceException e) {
+            TextService.printException(e);
+        }
     }
 }
