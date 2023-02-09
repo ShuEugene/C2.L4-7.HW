@@ -1,7 +1,6 @@
 package specialists;
 
-import java.util.LinkedList;
-import java.util.Deque;
+import java.util.*;
 
 import auxiliaryLibrary.DataService;
 import auxiliaryLibrary.TextService;
@@ -12,8 +11,6 @@ import transport.Transport.TransportException;
 
 import specialists.Mechanic.Repaired;
 import specialists.Mechanic.RepairType;
-
-import javax.sound.midi.Soundbank;
 
 import static specialists.Mechanic.RepairType.PROPERLY;
 
@@ -30,8 +27,10 @@ public class ServiceStation {
     }
 
     private final String title;
-    private LinkedList<Mechanic> mechanics = new LinkedList<>();
+    private Set<Mechanic> mechanics = new HashSet<>();
     private Deque<Repaired> repaired = new LinkedList<>();
+
+    private Map<Transport, Mechanic> tasks = new HashMap<>();
 
 
     public ServiceStation(String title, Mechanic... mechanics) throws ServiceException {
@@ -45,7 +44,40 @@ public class ServiceStation {
     }
 
 
-    public void performDiagnostic(Repaired repaired) {
+    public final void showTasks() {
+        String printTitle = "\nУ станции ТО " + getTitle() + " пока нет текущих задач.";
+
+        if (DataService.isCorrect(tasks))
+            printTitle = "\n" + getTitle() + " - Перечень задач по техобслуживанию:";
+
+        System.out.println(printTitle);
+
+        if (tasks.size() > 0)
+            TextService.printList(getTasksList(), TextService.PrintModes.NUMBERED_LIST_PM);
+    }
+
+    public final void addTask(Transport transport, Mechanic mechanic) {
+        try {
+            if (transport == null)
+                throw new ServiceException("Для добавления задачи техобслуживания следует указать транспортное средство," +
+                        " над которым должны быть произведены работы.");
+            if (mechanic == null)
+                throw new ServiceException("Для добавления задачи техобслуживания следует указать механика," +
+                        " который должен приступить к техобслуживанию " + transport.getTechnicalCard() + ".");
+
+            if (!mechanic.getRepaired().contains(new Repaired(transport, transport.getRepairType())))
+                mechanic.addRepaired(transport);
+
+            getTasks().put(transport, mechanic);
+            System.out.println("\n" + getTitle() + ": добавлена новая задача - " + mechanic + " добавил в очередь своих задач техобслуживание "
+                    + transport.getTechnicalCard() + ".");
+
+        } catch (ServiceException | Mechanic.MechanicException | TransportException e) {
+            TextService.printException(e);
+        }
+    }
+
+    public final void performDiagnostic(Repaired repaired) {
         try {
             if (repaired == null)
                 throw new ServiceException("Транспортное средство никак не обозначено. Проведение диагностики исключено.");
@@ -53,7 +85,7 @@ public class ServiceStation {
             if (!this.getRepaired().contains(repaired))
                 throw new ServiceException("Транспортное средство (" + repaired.getTechnicalCard()
                         + " пока ещё не обслуживается данной станцией ТО (" + this + ".\n"
-                + "Для проведения диагностики добавьте его в очередь обслуживания данной станции.");
+                        + "Для проведения диагностики добавьте его в очередь обслуживания данной станции.");
 
             RepairType repairType = repaired.getRepairType();
             System.out.println("\nТранспортное средство (" + repaired.getTechnicalCard() + ") " +
@@ -64,33 +96,33 @@ public class ServiceStation {
         }
     }
 
-    public void addRepaired(Transport... transports) {
+    public final void addRepaired(Transport... transports) {
         if (!DataService.isCorrect(transports))
             return;
 
-        for (Transport current :
+        for (Transport curTrasport :
                 transports) {
 
-            if (current != null && !(current instanceof Bus)) {
-                if (current.getRepairType() == PROPERLY) {
-                    System.out.println("Транспортное средство (" + current.getTechnicalCard()
+            if (curTrasport != null && !(curTrasport instanceof Bus)) {
+                if (curTrasport.getRepairType() == PROPERLY) {
+                    System.out.println("Транспортное средство (" + curTrasport.getTechnicalCard()
                             + ") исправно и не требует обслуживания на станции ТО (" + this + ".");
                     continue;
                 }
 
                 try {
-                    Repaired curRepaired = new Repaired(current, current.getRepairType());
+                    Repaired curRepaired = new Repaired(curTrasport, curTrasport.getRepairType());
                     if (!repaired.contains(curRepaired)) {
                         if (repaired.offer(curRepaired)) {
-                            System.out.println("\n" + current.getTechnicalCard()
+                            System.out.println("\n" + curTrasport.getTechnicalCard()
                                     + " теперь в очереди на обслуживание на станции ТО " + getTitle() + ".");
-                            current.setServiceStation(this);
+                            curTrasport.setServiceStation(this);
 
                         } else
-                            System.out.println("\n" + current.getTechnicalCard()
+                            System.out.println("\n" + curTrasport.getTechnicalCard()
                                     + " не удалось добавить в очередь на обслуживание на станции ТО " + getTitle() + ".");
                     } else
-                        System.out.println("\n" + current.getTechnicalCard()
+                        System.out.println("\n" + curTrasport.getTechnicalCard()
                                 + " уже стоит в очереди на обслуживание на станции ТО " + getTitle() + ".");
 
                 } catch (TransportException e) {
@@ -100,7 +132,7 @@ public class ServiceStation {
         }
     }
 
-    public void addMechanics(Mechanic... mechanics) {
+    public final void addMechanics(Mechanic... mechanics) {
         if (!DataService.isCorrect(mechanics))
             return;
 
@@ -132,14 +164,14 @@ public class ServiceStation {
         return "«" + title + "»";
     }
 
-    public final LinkedList<Mechanic> getMechanics() {
+    public final Set<Mechanic> getMechanics() {
         if (mechanics == null)
-            mechanics = new LinkedList<>();
+            mechanics = new HashSet<>();
 
         return mechanics;
     }
 
-    public final void setMechanics(LinkedList<Mechanic> mechanics) {
+    public final void setMechanics(Set<Mechanic> mechanics) {
         if (mechanics != null)
             this.mechanics = mechanics;
     }
@@ -156,8 +188,42 @@ public class ServiceStation {
             this.repaired = repaired;
     }
 
+    private final String[] getTasksList() {
+        if (!DataService.isCorrect(getTasks()))
+            return new String[]{"Текущих задач нет."};
+
+        String[] tasksList = new String[getTasks().size()];
+        int index = 0;
+        String transport, mechanic;
+
+        for (Map.Entry<Transport, Mechanic> curTask :
+                tasks.entrySet()) {
+            if (curTask.getKey() != null && curTask.getValue() != null) {
+                transport = curTask.getKey().getTechnicalCard();
+                mechanic = curTask.getValue().toString();
+                tasksList[index++] = "Ответственный за техобслуживание " + transport + " - " + mechanic;
+            }
+        }
+
+        if (index > 0)
+            return tasksList;
+        else
+            return new String[]{"Текущих задач нет."};
+    }
+    
+    public final Map<Transport, Mechanic> getTasks() {
+        if (tasks == null)
+            tasks = new HashMap<>();
+        return tasks;
+    }
+
+    public final void setTasks(Map<Transport, Mechanic> tasks) {
+        if (tasks != null)
+            this.tasks = tasks;
+    }
+
     @Override
-    public String toString() {
+    public final String toString() {
         return getTitle();
     }
 }

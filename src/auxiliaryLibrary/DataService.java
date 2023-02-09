@@ -3,6 +3,7 @@ package auxiliaryLibrary;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class DataService {
 
@@ -13,6 +14,10 @@ public class DataService {
 
     public static boolean isCorrect(Collection<?> list) {
         return list != null && list.size() > 0;
+    }
+
+    public static boolean isCorrect(Map<?, ?> map) {
+        return map != null && map.size() > 0;
     }
 
     public static <T> boolean isCorrect(T[] array) {
