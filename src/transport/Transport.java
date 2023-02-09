@@ -249,7 +249,6 @@ public abstract class Transport implements Competing {
         showSponsAmountSum();
     }
 
-    //    Добавить новый кейс в свитч после создания нового типа Спонсора
     private void addSpecifiedSponsor(Sponsor sponsor, float sponsorshipAmount) throws SponsorException {
 
         switch (sponsor.getClass().getSimpleName()) {
@@ -457,7 +456,6 @@ public abstract class Transport implements Competing {
         }
     }
 
-    //    Добавить новый кейс в свитч после создания нового типа Спонсора
     private final String getSponsorPrint(Sponsor sponsor) {
         switch (sponsor.getClass().getSimpleName()) {
             case "Physical":
